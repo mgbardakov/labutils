@@ -1,6 +1,7 @@
 package calculator.model;
 
 public class Measurement {
+    private double[] data;
     private double average;
     private int measureCount;
     private double uncertaintyA;
@@ -8,8 +9,18 @@ public class Measurement {
     private double uncertaintySum;
     private double uncertaintySingleSideExpanded;
     private double uncertaintyDoubleSideExpanded;
+    private String minMiss;
+    private String maxMiss;
 
     public Measurement() {
+    }
+
+    public double[] getData() {
+        return data;
+    }
+
+    public void setData(double[] data) {
+        this.data = data;
     }
 
     public double getAverage() {
@@ -68,4 +79,19 @@ public class Measurement {
         this.uncertaintyDoubleSideExpanded = uncertaintyDoubleSideExpanded;
     }
 
+    public String getMinMiss() {
+        return minMiss;
+    }
+
+    public void setMinMiss(String minMiss) {
+        this.minMiss = minMiss;
+    }
+
+    public String getMaxMiss() {
+        return maxMiss;
+    }
+
+    public void setMaxMiss(String maxMiss) {
+        this.maxMiss = maxMiss;
+    }
 }

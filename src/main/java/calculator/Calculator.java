@@ -5,9 +5,13 @@ import calculator.model.Measurement;
 import java.util.Arrays;
 
 public class Calculator {
-    private double[] data;
-    private double error;
-    private boolean isAbsolute;
+    private final double[] data;
+    private final double error;
+    private final boolean isAbsolute;
+    private static final double[] GRUBBS = new double[] {
+        1.155, 1.481, 1.715, 1.887, 2.02, 2.126, 2.215, 2.29, 2.355, 2.412,
+        2.462, 2.507, 2.549, 2.585, 2.62, 2.651, 2.681, 2.709, 2.733, 2.758,
+        2.781, 2.802, 2.822, 2.841, 2.859, 2.876, 2.893, 2.908};
 
     public Calculator(double[] data, double error, boolean isAbsolute) {
         this.data = data;
@@ -17,8 +21,9 @@ public class Calculator {
 
     public Measurement getMeasurement() {
         var rsl = new Measurement();
+        rsl.setData(data);
         rsl.setMeasureCount(getCount());
-        rsl.setAverage(getAverage());
+        rsl.setAverage(getAverage(rsl.getMeasureCount()));
         rsl.setUncertaintyA(getUncertaintyA(
                 rsl.getAverage(), rsl.getMeasureCount()));
         rsl.setUncertaintyB(getUncertaintyB(rsl.getAverage()));
@@ -26,6 +31,10 @@ public class Calculator {
                 rsl.getUncertaintyB()));
         rsl.setUncertaintyDoubleSideExpanded(rsl.getUncertaintySum() * 2);
         rsl.setUncertaintySingleSideExpanded(rsl.getUncertaintySum() * 1.64);
+        rsl.setMinMiss(getMinMiss(rsl.getAverage(), rsl.getUncertaintyA(),
+                rsl.getMeasureCount()));
+        rsl.setMaxMiss(getMaxMiss(rsl.getAverage(), rsl.getUncertaintyA(),
+                rsl.getMeasureCount()));
         return rsl;
     }
 
@@ -33,18 +42,18 @@ public class Calculator {
         return data.length;
     }
 
-    private double getAverage() {
-        return Arrays.stream(data).reduce(Double::sum).orElse(0);
+    private double getAverage(int count) {
+        return Arrays.stream(data).reduce(Double::sum).orElse(0) / count;
     }
 
     private double getUncertaintyA(double avg, int count) {
-        var sqrDeltaSum = Arrays.stream(data).reduce((x, y) ->
-                Math.pow(x - avg, 2) + Math.pow(y - avg, 2)).orElse(0);
-        return Math.sqrt(sqrDeltaSum / count * (count - 1));
+        var sqrDeltaSum = Arrays.stream(data).map(x -> Math.pow(x - avg, 2))
+                .reduce(Double::sum).orElse(0);
+        return Math.sqrt(sqrDeltaSum / count);
     }
 
     private double getUncertaintyB(double avg) {
-        var rsl = 0.d;
+        double rsl;
         if(isAbsolute) {
             rsl = error / Math.sqrt(3);
         } else {
@@ -56,4 +65,19 @@ public class Calculator {
     private double getUncertaintySum(double uncA, double uncB) {
         return Math.sqrt(Math.pow(uncA, 2) + Math.pow(uncB, 2));
     }
+
+    private String getMinMiss(double avg, double uncA, int count) {
+        var min = Arrays.stream(data).reduce(Math::min).orElse(0);
+        var kGrubbs = (avg - min) / uncA;
+        var kNorm = GRUBBS[count - 3];
+        return kGrubbs > kNorm ? "ПРОМАХ" : "НЕ ПРОМАХ";
+    }
+
+    private String getMaxMiss(double avg, double uncA, int count) {
+        var max = Arrays.stream(data).reduce(Math::max).orElse(0);
+        var kGrubbs = (max - avg) / uncA;
+        var kNorm = GRUBBS[count - 3];
+        return kGrubbs > kNorm ? "ПРОМАХ" : "НЕ ПРОМАХ";
+    }
+
 }
