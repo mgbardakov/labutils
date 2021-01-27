@@ -4,4 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+    <servlet-name>CounterServlet</servlet-name>
+    <servlet-class>servlets.CounterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CounterServlet</servlet-name>
+    <url-pattern>/count.do</url-pattern>
+  </servlet-mapping>
 </web-app>

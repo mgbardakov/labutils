@@ -25,6 +25,17 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -49,10 +60,6 @@
           <version>2.22.1</version>
         </plugin>
         <plugin>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.2</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>
         </plugin>
@@ -62,5 +69,39 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.heroku</groupId>
+                  <artifactId>webapp-runner</artifactId>
+                  <version>9.0.31.0</version>
+                  <destFileName>webapp-runner.jar</destFileName>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>artifacts</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <goal>war:inplace</goal>
+          <outputDirectory>artifacts</outputDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
