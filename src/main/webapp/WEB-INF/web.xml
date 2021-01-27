@@ -8,8 +8,16 @@
     <servlet-name>CounterServlet</servlet-name>
     <servlet-class>servlets.CounterServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>MeasurementServlet</servlet-name>
+    <servlet-class>servlets.MeasurementServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>CounterServlet</servlet-name>
     <url-pattern>/count.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MeasurementServlet</servlet-name>
+    <url-pattern>/measurement.do</url-pattern>
   </servlet-mapping>
 </web-app>

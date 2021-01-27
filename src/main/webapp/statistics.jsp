@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix='fmt' uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 <!doctype html>
 <html lang="en">
@@ -22,7 +23,6 @@
 </head>
 <body>
 <div class="container pt-3">
-
     <div class="row">
         <div class="card" style="width: 50%">
             <div class="card-header">
@@ -30,34 +30,17 @@
                     Калькулятор неопределенности "ТЕХНОТРОН 3000"
                 </p>
             </div>
-            <div class="card-body">
-                <form action="<c:url value="/measurement.do"/>" method="post">
-                    <ol>
-                        Измерения
-                        <c:forEach var="i" begin="1" end="${sessionScope.count}" step="1" >
-                            <li>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="count${i}">
-                                </div>
-                            </li>
-                        </c:forEach>
-                    </ol>
-                    <div class="form-group">
-                    <label>Погрешность</label>
-                    <select name="miss">
-                        <option value="true" selected>Абсолютная</option>
-                        <option value="false">Относительная</option>
-                    </select><br>
-                        <label>Значение погрешности</label>
-                        <input type="text" class="form-control" name="missValue">
-                    </div><br>
-                    <c:if test="${!empty error}">
-                        ${error}<br><br>
-                    </c:if>
-                    <button type="submit" class="btn btn-primary">Подтвердить</button>
-                </form>
+            <p style="text-align: center">
+                Расширенная неопределённость измерений:
+            <fmt:formatNumber type="number" pattern="#.##" value="${stats.average}"/>
+            ± <fmt:formatNumber type="number" pattern="#.##" value="${stats.uncertaintyDoubleSideExpanded}"/>
+            </p><br><br>
+            <form action="index.jsp">
+                <p style="text-align: center">
+                <button type="submit" class="btn btn-primary">Новая точка</button>
+                </p>
+            </form>
             </div>
-        </div>
     </div>
 </div>
 </body>

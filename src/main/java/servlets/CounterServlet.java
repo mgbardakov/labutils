@@ -10,14 +10,17 @@ public class CounterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var count =  req.getParameter("count");
-        if (count == null || Integer.parseInt(count) < 3
-                || Integer.parseInt(count) > 30) {
-            req.setAttribute("error", "Введите корректное значение (от 3 до 30)");
-            req.getRequestDispatcher("index.jsp").forward(req, resp);
-        } else {
+        try {
+           var intCount = Integer.parseInt(count);
+           if (intCount < 3 || intCount > 30) {
+               throw new IOException();
+           }
             HttpSession hs = req.getSession();
             hs.setAttribute("count", count);
             resp.sendRedirect("measurements.jsp");
+        } catch (Exception e) {
+            req.setAttribute("error", "Введите корректное значение (от 3 до 30)");
+            req.getRequestDispatcher("index.jsp").forward(req, resp);
         }
     }
 }

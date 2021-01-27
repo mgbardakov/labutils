@@ -26,7 +26,9 @@
     <div class="row">
         <div class="card" style="width: 50%">
             <div class="card-header">
-                Калькулятор неопределенности "ТЕХНОТРОН 3000"
+                <p style="text-align: center">
+                    Калькулятор неопределенности "ТЕХНОТРОН 3000"
+                </p>
             </div>
             <div class="card-body">
                 <form action="<c:url value="/count.do"/>" method="post">
