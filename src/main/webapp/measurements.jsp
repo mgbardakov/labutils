@@ -24,7 +24,7 @@
 <div class="container pt-3">
 
     <div class="row">
-        <div class="card" style="width: 50%">
+        <div class="card" style="width: 100%">
             <div class="card-header">
                 <p style="text-align: center">
                     Калькулятор неопределенности "ТЕХНОТРОН 3000"
