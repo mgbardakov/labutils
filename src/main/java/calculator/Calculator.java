@@ -1,6 +1,7 @@
 package calculator;
 
 import calculator.model.Measurement;
+import calculator.model.Order;
 
 import java.util.Arrays;
 
@@ -13,10 +14,10 @@ public class Calculator {
         2.462, 2.507, 2.549, 2.585, 2.62, 2.651, 2.681, 2.709, 2.733, 2.758,
         2.781, 2.802, 2.822, 2.841, 2.859, 2.876, 2.893, 2.908};
 
-    public Calculator(double[] data, double error, boolean isAbsolute) {
-        this.data = data;
-        this.error = error;
-        this.isAbsolute = isAbsolute;
+    public Calculator(Order order) {
+        this.data = order.getOrderData();
+        this.error = order.getErrorValue();
+        this.isAbsolute = order.isAbsolute();
     }
 
     public Measurement getMeasurement() {
