@@ -57,9 +57,20 @@
                     </li>
                 </ol>
                     <button class="btn btn-primary" type="button" id="addButton" style="margin-left: 40px">Добавить измерение</button>
-                    <button class="btn btn-primary" type="button" id="calcButton">Рассчитать неопределённость</button>
+                    <button class="btn btn-primary" type="reset" id="clearInput">Очистить ввод</button>
+                    <button class="btn btn-primary" type="reset" id="save-btn">Сохранить результат</button>
                 </form>
                 <h4><p class="text-center" id="result" style="margin-top: 30px"></p></h4>
+                <button class="btn btn-primary float-right" type="button" id="journalButton"style="margin-bottom: 30px">Журнал</button>
+                <div class="d-none" id="table-div">
+                    <table class="table table-striped table-bordered" id="journal-table">
+                        <tr>
+                            <th scope="col">№</th>
+                            <th scope="col">Измерения</th>
+                            <th scope="col">Результат</th>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
