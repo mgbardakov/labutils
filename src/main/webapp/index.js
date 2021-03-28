@@ -4,7 +4,8 @@ function validateInput() {
     for (let i = 0; i < els.length; i++) {
         let element = els[i];
         if (element.getAttribute('type') === 'text') {
-            if (element.value !== '' && !isNumeric(element.value)) {
+            let fixedElement = element.value.replaceAll(',', '.')
+            if (fixedElement !== '' && !isNumeric(fixedElement)) {
                 rslString = 'Проверьте корректность ввода'
             }
         }
@@ -23,6 +24,7 @@ function addInputField() {
         '                            <input type="text" class="form-control data-field">\n' +
         '                        </div>\n' +
         '                    </li>')
+    mapDataListeners();
 }
 
 function isNumeric(str) {
@@ -40,12 +42,7 @@ function createRequestObject() {
 }
 
 function isRequestValid(request) {
-    if (request.errorValue === '') {
-        alert('Введите погрешность')
-        return false;
-    }
     if (request.orderData.length < 3) {
-        alert('Недостаточно измерений')
         return false;
     }
     return true;
@@ -57,7 +54,7 @@ function isAbsolute(){
 }
 function getErrorValue(){
     let element = document.querySelector('#errorValue');
-    return element.value;
+    return element.value.replaceAll(',', '.');
 }
 function getOrderData(){
     let rslArray = [];
@@ -65,7 +62,8 @@ function getOrderData(){
     console.log(list)
     for (let el of list) {
         if (el.value !== '') {
-            rslArray.push(el.value);
+            let fixedElement = el.value.replaceAll(',', '.')
+            rslArray.push(fixedElement);
         }
     }
     return rslArray;
@@ -91,10 +89,69 @@ function sendData() {
 
 function setResult(data) {
     let element = document.getElementById('result');
-    element.innerText = `Результат: ${data.average.toFixed(1)} ± ${data.uncertaintyDoubleSideExpanded.toFixed(1)}`
+    element.innerText = `Результат: ${Math.round(data.average * 10) / 10} ± ${Math.round(data.uncertaintyDoubleSideExpanded * 10) / 10}`
+}
+
+function hideTable(){
+    let element = document.querySelector('#table-div');
+    if (element.classList.contains('d-none')) {
+        element.classList.remove('d-none');
+        element.classList.add('d-block')
+    } else if (element.classList.contains('d-block')) {
+        element.classList.remove('d-block');
+        element.classList.add('d-none')
+    }
+}
+
+async function addNewJournalMessage() {
+    let result = document.querySelector('#result').innerText.substr(11);
+    setResultEmpty();
+    if (result !== '') {
+        let dataArr = getOrderData();
+        if (dataArr.length < 3) {
+            return
+        }
+        let table  = document.querySelector('#journal-table')
+        let row = table.insertRow(-1);
+        let number = row.insertCell(-1);
+        number.innerText = (table.rows.length - 1).toString();
+        let orderData = row.insertCell(-1)
+        for (let element of dataArr) {
+            orderData.innerText = orderData.innerText + element + ';'
+        }
+        let resultCell = row.insertCell(-1);
+        resultCell.innerText = result;
+    }
+}
+
+function mapDataListeners() {
+    let dataArr = document.querySelectorAll('.data-field')
+    for (let element of dataArr) {
+        element.addEventListener('keyup', event => {
+            if (event.key === 'Enter') {
+                sendData();
+            }
+        })
+        element.addEventListener('blur', sendData)
+        element.addEventListener('focus', isErrorHasValue)
+    }
+}
+
+function isErrorHasValue() {
+    return document.querySelector('#errorValue').value !== '';
+}
+
+function setResultEmpty() {
+    document.querySelector('#result').innerText = '';
 }
 
 document.querySelector('#addButton')
     .addEventListener('click', addInputField);
-document.querySelector('#calcButton')
-    .addEventListener('click', sendData);
+document.querySelector('#journalButton')
+    .addEventListener('click', hideTable)
+document.querySelector('#save-btn')
+    .addEventListener('click', addNewJournalMessage)
+document.querySelector('#clearInput')
+    .addEventListener('click', setResultEmpty)
+mapDataListeners();
+
