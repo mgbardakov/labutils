@@ -90,6 +90,9 @@ function sendData() {
 function setResult(data) {
     let element = document.getElementById('result');
     element.innerText = `Результат: ${Math.round(data.average * 10) / 10} ± ${Math.round(data.uncertaintyDoubleSideExpanded * 10) / 10}`
+    let grubbs = document.querySelector('#grubbs');
+    grubbs.innerHTML = `Минимум: ${data.minMiss}<br>
+                        Максимум ${data.maxMiss}`
 }
 
 function hideTable(){
@@ -105,6 +108,7 @@ function hideTable(){
 
 async function addNewJournalMessage() {
     let result = document.querySelector('#result').innerText.substr(11);
+    let grubbs = document.querySelector('#grubbs').innerHTML;
     setResultEmpty();
     if (result !== '') {
         let dataArr = getOrderData();
@@ -121,6 +125,8 @@ async function addNewJournalMessage() {
         }
         let resultCell = row.insertCell(-1);
         resultCell.innerText = result;
+        let grubbsCell = row.insertCell(-1);
+        grubbsCell.innerHTML = grubbs;
     }
 }
 
@@ -143,6 +149,7 @@ function isErrorHasValue() {
 
 function setResultEmpty() {
     document.querySelector('#result').innerText = '';
+    document.querySelector('#grubbs').innerText = '';
 }
 
 document.querySelector('#addButton')

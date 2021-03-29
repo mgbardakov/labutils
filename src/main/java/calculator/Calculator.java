@@ -50,7 +50,7 @@ public class Calculator {
     private double getUncertaintyA(double avg, int count) {
         var sqrDeltaSum = Arrays.stream(data).map(x -> Math.pow(x - avg, 2))
                 .reduce(Double::sum).orElse(0);
-        return Math.sqrt(sqrDeltaSum / count);
+        return Math.sqrt(sqrDeltaSum / (count - 1));
     }
 
     private double getUncertaintyB(double avg) {
