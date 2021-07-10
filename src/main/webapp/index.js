@@ -90,9 +90,9 @@ function sendData() {
 function setResult(data) {
     let element = document.getElementById('result');
     element.innerText = `Результат: ${Math.round(data.average * 10) / 10} ± ${Math.round(data.uncertaintyDoubleSideExpanded * 10) / 10}`
-    let grubbs = document.querySelector('#grubbs');
-    grubbs.innerHTML = `Минимум: ${data.minMiss}<br>
-                        Максимум: ${data.maxMiss}`
+    // let grubbs = document.querySelector('#grubbs');
+    // grubbs.innerHTML = `Минимум: ${data.minMiss}<br>
+    //                     Максимум: ${data.maxMiss}`
 }
 
 function hideTable(){
