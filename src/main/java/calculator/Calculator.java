@@ -32,10 +32,10 @@ public class Calculator {
                 rsl.getUncertaintyB()));
         rsl.setUncertaintyDoubleSideExpanded(rsl.getUncertaintySum() * 2);
         rsl.setUncertaintySingleSideExpanded(rsl.getUncertaintySum() * 1.64);
-        rsl.setMinMiss(getMinMiss(rsl.getAverage(), rsl.getUncertaintyA(),
-                rsl.getMeasureCount()));
-        rsl.setMaxMiss(getMaxMiss(rsl.getAverage(), rsl.getUncertaintyA(),
-                rsl.getMeasureCount()));
+        //rsl.setMinMiss(getMinMiss(rsl.getAverage(), rsl.getUncertaintyA(),
+        //        rsl.getMeasureCount()));
+        //rsl.setMaxMiss(getMaxMiss(rsl.getAverage(), rsl.getUncertaintyA(),
+        //        rsl.getMeasureCount()));
         return rsl;
     }
 
@@ -50,7 +50,8 @@ public class Calculator {
     private double getUncertaintyA(double avg, int count) {
         var sqrDeltaSum = Arrays.stream(data).map(x -> Math.pow(x - avg, 2))
                 .reduce(Double::sum).orElse(0);
-        return Math.sqrt(sqrDeltaSum / (count - 1));
+        var denominator = (count > 8) ? (count * (count - 1)) : (count - 1);
+        return denominator > 0 ? Math.sqrt(sqrDeltaSum / denominator) : 0;
     }
 
     private double getUncertaintyB(double avg) {
@@ -64,7 +65,11 @@ public class Calculator {
     }
 
     private double getUncertaintySum(double uncA, double uncB) {
-        return Math.sqrt(Math.pow(uncA, 2) + Math.pow(uncB, 2));
+        if (this.getCount() == 1 || isHomo()) {
+            return uncB;
+        } else {
+            return Math.sqrt(Math.pow(uncA, 2) + Math.pow(uncB, 2));
+        }
     }
 
     private String getMinMiss(double avg, double uncA, int count) {
@@ -79,6 +84,18 @@ public class Calculator {
         var kGrubbs = (max - avg) / uncA;
         var kNorm = GRUBBS[count - 3];
         return kGrubbs > kNorm ? "ПРОМАХ" : "НЕ ПРОМАХ";
+    }
+
+    private boolean isHomo(){
+        boolean rsl = true;
+        var firstValue = data[0];
+        for (int i = 1; i < data.length; i++) {
+            if(firstValue != data[i]) {
+                rsl = false;
+                break;
+            }
+        }
+        return rsl;
     }
 
 }

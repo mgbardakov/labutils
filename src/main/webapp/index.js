@@ -42,7 +42,7 @@ function createRequestObject() {
 }
 
 function isRequestValid(request) {
-    if (request.orderData.length < 3) {
+    if (request.orderData.length === 2) {
         return false;
     }
     return true;
@@ -112,7 +112,7 @@ async function addNewJournalMessage() {
     setResultEmpty();
     if (result !== '') {
         let dataArr = getOrderData();
-        if (dataArr.length < 3) {
+        if (dataArr.length < 1) {
             return
         }
         let table  = document.querySelector('#journal-table')
