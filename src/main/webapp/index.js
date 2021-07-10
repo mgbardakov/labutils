@@ -125,8 +125,8 @@ async function addNewJournalMessage() {
         }
         let resultCell = row.insertCell(-1);
         resultCell.innerText = result;
-        let grubbsCell = row.insertCell(-1);
-        grubbsCell.innerHTML = grubbs;
+        //let grubbsCell = row.insertCell(-1);
+        //grubbsCell.innerHTML = grubbs;
     }
 }
 
@@ -149,7 +149,7 @@ function isErrorHasValue() {
 
 function setResultEmpty() {
     document.querySelector('#result').innerText = '';
-    document.querySelector('#grubbs').innerText = '';
+    //document.querySelector('#grubbs').innerText = '';
 }
 
 document.querySelector('#addButton')
